@@ -1,0 +1,272 @@
+<div id="receipt-div">
+        <table width="100%" style="margin: 4px 0;font-size: 11px">
+            <tbody>
+                <tr>
+                    <td align="center">
+                        {{outlet.name}} ({{outlet.identity}})
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center">
+                        {{outlet.name}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table width="100%" style="margin: 4px 0;font-size: 11px">
+            <tbody>{{#each regDetails}}
+                <tr>
+                    <td align="center">
+                        {{name}}:{{value}})
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        <table width="100%" style="margin: 4px 0;font-size: 11px">
+
+            <tbody align="center">
+                <tr>
+                    <td id ='inv' align="center">
+                        INVOICE#&nbsp;{{invoice_number}}
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center">
+                        TIME: {{created_on}}
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center">
+                        ORDER ID: {{id}}
+                    </td>
+                </tr>
+                <tr *ngIf="cart?.table_id">
+                    <td align="center">
+                        TABLE: {{table_number}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <ng-container *ngIf="cart.customer_id">
+            <table width="100%" style="margin: 4px 0;font-size: 11px">
+                <tbody>
+                    <tr>
+                        <td align="center">
+                            NAME:&nbsp;{{customer.name}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center">
+                            NUMBER:&nbsp;{{customer.mobile_number}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center">
+                            ADDRESS:&nbsp;{{address.name}}
+                            <ng-container *ngIf="cart.address?.locality">, {{address.locality.name}}
+                            </ng-container>
+                            <ng-container *ngIf="cart.address?.locality?.city">, {{address.locality.city.name}}
+                            </ng-container>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </ng-container>
+
+        <table width="100%" style="margin: 4px 0;font-size: 11px">
+            <tbody>
+                <tr style="margin-bottom: 6px">
+                    <td align="left">
+                        ITEM
+                    </td>
+                    <td align="center">
+                        QTY
+                    </td>
+                    <td align="right">
+                        AMOUNT
+                    </td>
+                </tr>
+
+                <ng-container *ngFor="let item of cart.items">
+                    {{#each items}}
+                    <ng-container *ngIf="!item.is_canceled">
+                        <tr>
+                            <td align="left">
+                                {{name}}
+                            </td>
+                        </tr>
+
+                        <ng-container *ngIf="item.children && item.children.length">
+                            {{#each children}}
+                            <ng-container *ngFor="let child of item.children">
+                                {{#each children}}
+                                <tr>
+                                    <td align="left">
+                                        <div>
+                                            {{name}}
+                                        </div>
+                                        <ng-container *ngIf="child.add_ons && child.add_ons.length">
+                                            {{#each add_ons}}
+                                            <ng-container *ngFor="let addOn of child.add_ons">
+                                                <div>
+                                                    {{name}}
+                                                </div>
+                                                <ng-container *ngIf="addOn.quantity>1">
+                                                    {{quantity}}
+                                                </ng-container>
+                                            </ng-container>
+                                            {{/each}}
+                                        </ng-container>
+
+                                        <ng-container *ngIf="child.children && child.children.length">
+                                            {{#each children}}
+                                            <div>
+                                                {{name}}
+                                            </div>
+                                            <ng-container *ngIf="child.children[0].add_ons && child.children[0].add_ons.length">
+                                                {{#each add_ons}}
+                                                <ng-container *ngFor="let addOn of child.children[0].add_ons">
+                                                    <div>
+                                                        {{name}}
+                                                    </div>
+                                                    <ng-container *ngIf="addOn.quantity>1">
+                                                        {{quantity}}
+                                                    </ng-container>
+                                                </ng-container>
+                                                {{/each}}
+                                            </ng-container>
+                                            {{/each}}
+                                        </ng-container>
+                                    </td>
+                                </tr>
+                                {{/each}}
+                            </ng-container>
+                            {{/each}}
+                        </ng-container>
+
+
+                        <ng-container *ngIf="item.add_ons && item.add_ons.length" style="margin-left: 20px">
+                            {{#each add_ons}}
+                            <ng-container *ngFor="let addOn of item.add_ons">
+                                <tr>
+                                    <td align="left">
+                                        <div>{{name}}</div>
+                                        <ng-container *ngIf="addOn.quantity > 1" style="width: 20%;display:
+                        inline-block;font-size:10px;text-align:
+                                right">{{quantity}}
+                                        </ng-container>
+                                    </td>
+                                </tr>
+
+                            </ng-container>
+                            {{/each}}
+                        </ng-container>
+                        <tr>
+                            <td align="left"></td>
+                            <td align="center">
+                                x&nbsp;{{quantity}}
+                            </td>
+                            <td align="right">
+                                {{final_price}}
+                            </td>
+                        </tr>
+                    </ng-container>
+                    {{/each}}
+                </ng-container>
+            </tbody>
+        </table>
+        <ng-container *ngIf="cart?.special_instructions">
+            <table width="100%" style="margin: 4px 0;font-size: 11px">
+                <tbody>
+
+                    <tr align="center">
+                        <td>
+                            {{special_instructions}}
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </ng-container>
+
+
+        <table width="100%" style="margin: 4px 0;font-size: 11px">
+            <tbody>
+                <tr>
+                    <td align="left">SUBTOTAL:</td>
+                    <td align="right">{{sub_total}}</td>
+                </tr>
+                <ng-container *ngFor="let tax of cart.taxes">
+                    <tr>
+                        {{#each taxes}}
+                        <td align="left">
+                            {{name}}@{{value}}
+                        </td>
+                        <td align="right">
+                            {{amount}}
+                        </td>
+                        {{/each}}
+                    </tr>
+
+                </ng-container>
+
+                <ng-container *ngIf="cart?.discount_value">
+                    <tr>
+                        <td align="left">DISCOUNT:</td>
+                        <td align="right">{{discount_value}}</td>
+                    </tr>
+                </ng-container>
+
+                <ng-container *ngIf="cart.delivery_charge">
+                    <tr>
+                        <td align="left">DELIVERY CHARGE:</td>
+
+                        <td align="right">{{delivery_charge}}</td>
+                    </tr>
+                </ng-container>
+                <ng-container *ngIf="cart.packaging_charge">
+                    <tr>
+                        <td align="left">PACKAGING CHARGE:</td>
+
+                        <td align="right">{{packaging_charge}}</td>
+                    </tr>
+                </ng-container>
+                <tr>
+                    <td align="left">PAYMENT MODE:</td>
+                    <td align="right">
+                        <ng-container *ngFor="let paymentMode of cart.payment_modes;let last = last">
+                            {{paymentMode.mode}}
+                        </ng-container>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td align="left">AMOUNT PAID:</td>
+                    <td align="right">{{amount_paid}}</td>
+                </tr>
+
+                <ng-container *ngIf="cart?.delivery_instructions">
+                    <tr>
+                        <td align="left">DELIVERY INST:</td>
+                        <td align="right">{{delivery_instructions}}</td>
+                    </tr>
+                </ng-container>
+                <ng-container *ngIf="cart?.special_instructions">
+                    <tr>
+                        <td align="left">SPECIAL INST:</td>
+                        <td align="right">{{special_instructions}}</td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+        <table width="100%" style="margin: 4px 0;font-size: 11px">
+            <tbody>
+                <tr>
+                    <td align="left">NET PAYABLE:</td>
+                    <td align="center">QTY: {{total_items}}</td>
+                    <td align="right">{{total}}</td>
+                </tr>
+            </tbody>
+        </table>
+</div>
